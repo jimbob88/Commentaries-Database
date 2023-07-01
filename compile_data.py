@@ -108,18 +108,18 @@ def process_toml_file(toml_path: Path, father_meta_data) -> Union[Iterator[Comme
         source_url = commentary['sources'][0]['url'] if 'sources' in commentary else ""
         source_title = commentary['sources'][0]['title'] if 'sources' in commentary else ""
         date = commentary_date(path_metadata.father_name, father_meta_data, commentary)
-        append_to_author_name = commentary.get('append_to_author_name', '')
+        append_to_author_name: str = commentary.get('append_to_author_name', '')
 
         yield Commentary(
             filename=toml_path.name,
-            father_name=path_metadata.father_name,
-            bible_book_name=path_metadata.bible_book_name,
+            father_name=path_metadata.father_name.strip(),
+            bible_book_name=path_metadata.bible_book_name.strip(),
             bible_verse_range=path_metadata.bible_verse_range,
-            source_url=source_url,
-            source_title=source_title,
+            source_url=source_url.strip(),
+            source_title=source_title.strip(),
             date=date,
-            append_to_author_name=append_to_author_name,
-            txt=commentary['quote']
+            append_to_author_name=append_to_author_name.strip(),
+            txt=commentary['quote'].strip()
         )
 
 

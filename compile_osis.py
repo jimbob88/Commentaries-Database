@@ -114,21 +114,26 @@ osis_text = Template("""
 """)
 
 
-def verse_range_to_annotate_ref(book_name: str, vr: VerseRange):
+def verse_range_to_annotate_ref(book_name: str, vr: VerseRange) -> str:
     book_abbr = all_abbr[book_name.strip()]
     if vr.start_chapter == vr.end_chapter and vr.start_verse == vr.end_verse:
         return f"{book_abbr}.{vr.start_chapter}.{vr.start_verse}"
 
-    return f"{book_abbr}.{vr.start_chapter}.{vr.start_verse}-{book_abbr}.{vr.start_chapter}.{vr.start_verse}"
+    return f"{book_abbr}.{vr.start_chapter}.{vr.start_verse}-{book_abbr}.{vr.end_chapter}.{vr.end_verse}"
 
 
-def commentary_to_xml(commentary: Commentary) -> str:
-    c_text = ""
-    try:
-        c_text += f'<div type="section" annotateType="commentary" annotateRef="{verse_range_to_annotate_ref(commentary.bible_book_name, commentary.bible_verse_range)}">'
-    except BaseException as e:
-        print(commentary, e)
-    c_text += '<title type="sub">'
+def verse_range_to_reference(book_name: str, vr: VerseRange) -> str:
+    """Converts a verse range and book name to John 3:16-17 or John 4:11-5:1"""
+    if vr.start_chapter == vr.end_chapter:
+        if vr.start_verse == vr.end_verse:
+            return f"{book_name.strip()} {vr.start_chapter}:{vr.start_verse}"
+        return f"{book_name.strip()} {vr.start_chapter}:{vr.start_verse}-{vr.end_verse}"
+
+    return f"{book_name.strip()} {vr.start_chapter}:{vr.start_verse}-{vr.end_chapter}:{vr.end_verse}"
+
+
+def commentary_to_title_xml(commentary: Commentary) -> str:
+    c_text = '<title type="sub">'
     if commentary.date > 0:
         c_text += f"<i>[{commentary.date} AD]</i> "
     elif commentary.date < 0:
@@ -137,8 +142,26 @@ def commentary_to_xml(commentary: Commentary) -> str:
     c_text += f'{commentary.father_name}'
     if commentary.append_to_author_name:
         c_text += f" {commentary.append_to_author_name}"
+    c_text += f" on {verse_range_to_reference(commentary.bible_book_name, commentary.bible_verse_range)}"
     c_text += '</title>'
-    c_text += f'<p>{commentary.txt}</p></div>'
+    return c_text
+
+
+def commentary_to_xml(commentary: Commentary) -> str:
+    c_text = ""
+    try:
+        c_text += f'<div type="section" annotateType="commentary" annotateRef="{verse_range_to_annotate_ref(commentary.bible_book_name, commentary.bible_verse_range)}">'
+    except BaseException as e:
+        print(commentary, e)
+
+    c_text += commentary_to_title_xml(commentary)
+
+    c_text += f'<p>{commentary.txt}</p>'
+
+    if commentary.source_title.strip():
+        c_text += f'<p>{commentary.source_title.strip()}</p>'
+    
+    c_text += '</div>'
     return c_text
 
 

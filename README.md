@@ -109,7 +109,7 @@ Edit `RC_HistoricalChristianCommentaries.conf` and write:
 
 ```ini
 [RC_HistoricalChristianCommentaries]
-DataPath=./modules/comments/rawcom/test/
+DataPath=./modules/comments/rawcom/RC_HistoricalChristianCommentaries/
 ModDrv=RawCom
 SourceType=OSIS
 Lang=en
