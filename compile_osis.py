@@ -142,7 +142,7 @@ def commentary_to_title_xml(commentary: Commentary) -> str:
     c_text += f'{commentary.father_name}'
     if commentary.append_to_author_name:
         c_text += f" {commentary.append_to_author_name}"
-    c_text += f" on {verse_range_to_reference(commentary.bible_book_name, commentary.bible_verse_range)}"
+    c_text += f' on <reference osisRef="{verse_range_to_annotate_ref(commentary.bible_book_name, commentary.bible_verse_range)}">{verse_range_to_reference(commentary.bible_book_name, commentary.bible_verse_range)}</reference>'
     c_text += '</title>'
     return c_text
 
@@ -160,7 +160,7 @@ def commentary_to_xml(commentary: Commentary) -> str:
 
     if commentary.source_title.strip():
         c_text += f'<p>{commentary.source_title.strip()}</p>'
-    
+
     c_text += '</div>'
     return c_text
 
