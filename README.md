@@ -1,9 +1,12 @@
 # Commentaries-Database
 
-To compile these files into a single data object, use the "compile_data.py" script in this repository. It's a python3 script, and requires you
-to `pip install rtoml` first. You can select CSV, SQLITE, or JSON as the output format (resulting in a new file called data.json, data.csv, or
-data.sqlite).
+## Latest Release
 
+Get the latest compiled sqlite database with all this data in the [Releases on this repository](https://github.com/HistoricalChristianFaith/Commentaries-Database/releases).
+
+## Compile yourself
+
+To compile these files into a single data object, use the "compile_data.py" script in this repository. It's a python3 script, and requires you to `pip install rtoml` first. You can select CSV, SQLITE, or JSON as the output format (resulting in a new file called data.json, data.csv, or data.sqlite).
 Invoke it like so:
 
 ```
